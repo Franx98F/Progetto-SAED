@@ -20,7 +20,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 
 Route::middleware(['auth:api'])->group(function () {
     //Operazioni di gestione e creazione corso scii per maestri
-    Route::post('/tipo', [AuthController::class, 'createtipo'])->name('api.tipo');
+    Route::post('/tipo', [App\Http\Controllers\ApiController::class, 'createtipo'])->name('api.tipo');
     Route::post('/corso', [App\Http\Controllers\ApiController::class, 'createcorso'])->name('api.crea_corso');
     Route::get('/mostracorsi', [App\Http\Controllers\ApiController::class, 'mostracorsi'])->name('api.mostra_corsi');
     Route::put('/updatecorso/{idCorso}', [App\Http\Controllers\ApiController::class, 'updatecorso'])->name('api.modifica_corso');

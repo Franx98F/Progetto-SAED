@@ -8,13 +8,14 @@
     button#iscrizione-corsi-s {
         position: absolute;
         margin-top: 24px;
-        margin-left: 150px;
+        /*margin-left: 150px; */
+        /*margin-right: 80px;*/
     }
 
     button#disiscrizione-corsi-s {
         position: absolute;
         margin-top: 24px;
-        margin-left: 40%;
+        margin-left: 145px;
     }
 
     div#spinner-border {
@@ -41,6 +42,10 @@
     button#visualizza-corsi {
         /* position: fixed; */
         transform: translate(10px, 10px);
+    }
+
+    button#delete-p{
+        float: right;
     }
 </style>
 
@@ -72,12 +77,19 @@
                                 <div class="modal-body">
 
                                     Scegli Corso: <select name="tipo" id="selezionaCorsoIscrizione">
-                                        {{ $corsi_scii = DB::table('corsoscii')->select('idCorso','nome')->get() }}
+                                        {{ $corsi_scii = DB::table('corsoscii')->select('idCorso','nome', 'membriMax')->get() }}
+
                                         <option value="" selected="selected"> Seleziona Corso
                                         </option>
                                         @foreach($corsi_scii as $corso_scii)
-                                        <option value=""> {{ $corso_scii->idCorso." - ".$corso_scii->nome }}
+                                    
+                                        @if($corso_scii->membriMax != 0)
+                                        <option value=""> 
+                                            {{ $corso_scii->idCorso." - ".$corso_scii->nome }} 
                                         </option>
+                                        
+                                        @endif
+                    
                                         @endforeach
                                     </select>
                                     <br><br>
@@ -141,7 +153,7 @@
                     <br>
                     <form method="POST" action="{{ route('cancellautente', Auth::id()) }}">
                         @csrf
-                        <button type="submit" class="btn btn-xs btn-danger btn-flat show_confirm" data-toggle="tooltip" title='Delete'>
+                        <button id="delete-p" type="submit" class="btn btn-xs btn-danger btn-flat show_confirm" data-toggle="tooltip" title='Delete'>
                             Elimina Profilo
                             <i class="fa fa-trash"> </i>
 
@@ -203,7 +215,7 @@
                         },
                         error: function(err) {
                             console.log(err);
-                            alert("Iscrizione non effettuata...\nQualcosa è andato storto");
+                            alert("Iscrizione non effettuata...\nQualcosa è andato storto\nCapienza corsi esaurita");
                         }
 
                     })

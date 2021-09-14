@@ -216,12 +216,22 @@
                             </div>
                             <div class="modal-body">
 
-                                Scegli Corso: <select name="corso" id="selezionaCorso">
+                                Scegli Corso: <select name="corso" id="selezionaCorsoModifica">
                                     {{ $corsi_scii = DB::table('corsoscii')->select('idCorso','nome')->get() }}
                                     <option value="" selected="selected"> Seleziona Corso
                                     </option>
                                     @foreach($corsi_scii as $corso_scii)
                                     <option value=""> {{ $corso_scii->idCorso." - ".$corso_scii->nome }}
+                                    </option>
+                                    @endforeach
+                                </select><br><br>
+
+                                Scegli Tipo Corso: <select name="corso" id="selezionaCorsoModificaTipo">
+                                    {{ $corsi_scii = DB::table('tipo')->select('idCorso','difficolta')->get() }}
+                                    <option value="" selected="selected"> Seleziona Tipo
+                                    </option>
+                                    @foreach($corsi_scii as $corso_scii)
+                                    <option value=""> {{ $corso_scii->idCorso." - ".$corso_scii->difficolta }}
                                     </option>
                                     @endforeach
                                 </select>
@@ -443,12 +453,18 @@
 
                 $('button#send-corso-data-modifica').click(function() {
 
-                    var tipo_str = $('select#selezionaCorso').find(':selected')
+                    var tipo_str = $('select#selezionaCorsoModifica').find(':selected')
                         .text()
                         .match(/\d+/);
 
                     var tipo_int = (parseInt(tipo_str[0]));
 
+                    var tipo2_str = $('select#selezionaCorsoModificaTipo').find(':selected')
+                        .text()
+                        .match(/\d+/);
+
+                    var tipo2_int = (parseInt(tipo2_str[0]));
+                    
                     var nome_mod = $('input#nome-corso-modifica').val();
                     var membriMax_mod = parseInt($('input#membri-max_modifica').val());
 
@@ -459,7 +475,7 @@
                     var fine_mod = $('input#fine_data_modifica').val();
 
                     var jsonCorso_mod = {
-                        tipo: tipo_int,
+                        tipo: tipo2_int,
                         nome: nome_mod,
                         membriMax: membriMax_mod,
                         orario_inizio: orario_inizio_mod,
@@ -469,7 +485,8 @@
                     };
 
                     const nowDate = new Date();
-                    checkDate(inizio, fine, nowDate);
+                    checkDate(inizio_mod, fine_mod, nowDate);
+                    //console.log(tipo_int);
 
                     $.ajax({
                         type: "PUT",
